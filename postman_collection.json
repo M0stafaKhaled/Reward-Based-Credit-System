@@ -1,230 +1,468 @@
 {
-  "info": {
-    "_postman_id": "reward-based-api-collection",
-    "name": "Reward-Based Credit System API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-  },
-  "variable": [
-    { "key": "base_url", "value": "http://localhost/api" },
-    { "key": "auth_token", "value": "" }
-  ],
-  "item": [
-    {
-      "name": "Auth: Login (Sanctum)",
-      "request": {
-        "method": "POST",
-        "header": [
-          { "key": "Content-Type", "value": "application/json" }
-        ],
-        "url": { "raw": "{{base_url}}/login", "host": [ "{{base_url}}" ], "path": [ "login" ] },
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password\"\n}"
+    "info": {
+        "_postman_id": "3a68f377-1262-4a9c-a524-d3a41c1637fc",
+        "name": "Reward-Based Credit System API",
+        "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+        "_exporter_id": "5909341"
+    },
+    "item": [
+        {
+            "name": "Auth: Login (Sanctum)",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "if (pm.response.code === 200) {\r",
+                            "    let responseBody;\r",
+                            "       responseBody = pm.response.json();\r",
+                            "\r",
+                            "    if (\r",
+                            "        responseBody &&\r",
+                            "        responseBody.success === true &&\r",
+                            "        responseBody.data &&\r",
+                            "        responseBody.data.access_token\r",
+                            "    ) {\r",
+                            "        pm.environment.set('auth_token', responseBody.data.access_token);\r",
+                            "        pm.collectionVariables.set('auth_token', responseBody.data.access_token);\r",
+                            "        console.log('auth_token updated successfully');\r",
+                            "        console.log('Token value: ' + responseBody.data.access_token);\r",
+                            "    } else {\r",
+                            "        console.log('access_token not found in the response or unexpected response format');\r",
+                            "    }\r",
+                            "}"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {}
+                    }
+                },
+                {
+                    "listen": "prerequest",
+                    "script": {
+                        "exec": [
+                            ""
+                        ],
+                        "type": "text/javascript",
+                        "packages": {}
+                    }
+                }
+            ],
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    },
+                    {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password\"\n}"
+                },
+                "url": "{{base_url}}/login"
+            },
+            "response": []
+        },
+        {
+            "name": "Auth: Login (Sanctum) Admin",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "if (pm.response.code === 200) {\r",
+                            "    let responseBody;\r",
+                            "       responseBody = pm.response.json();\r",
+                            "\r",
+                            "    if (\r",
+                            "        responseBody &&\r",
+                            "        responseBody.success === true &&\r",
+                            "        responseBody.data &&\r",
+                            "        responseBody.data.access_token\r",
+                            "    ) {\r",
+                            "        pm.environment.set('auth_token', responseBody.data.access_token);\r",
+                            "        pm.collectionVariables.set('auth_token', responseBody.data.access_token);\r",
+                            "        console.log('auth_token updated successfully');\r",
+                            "        console.log('Token value: ' + responseBody.data.access_token);\r",
+                            "    } else {\r",
+                            "        console.log('access_token not found in the response or unexpected response format');\r",
+                            "    }\r",
+                            "}"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {}
+                    }
+                },
+                {
+                    "listen": "prerequest",
+                    "script": {
+                        "exec": [
+                            ""
+                        ],
+                        "type": "text/javascript",
+                        "packages": {}
+                    }
+                }
+            ],
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    },
+                    {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"password\"\n}"
+                },
+                "url": "{{base_url}}/admin/login"
+            },
+            "response": []
+        },
+        {
+            "name": "Get Credit Packages",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{base_url}}/credit-packages"
+            },
+            "response": []
+        },
+        {
+            "name": "Purchase Credit Package",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{auth_token}}"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"package_id\": 1\n}"
+                },
+                "url": "{{base_url}}/purchase"
+            },
+            "response": []
+        },
+        {
+            "name": "Get User Points",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{auth_token}}"
+                    }
+                ],
+                "url": "{{base_url}}/points"
+            },
+            "response": []
+        },
+        {
+            "name": "Redeem Product",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{auth_token}}"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"product_id\": 1\n}"
+                },
+                "url": "{{base_url}}/redeem"
+            },
+            "response": []
+        },
+        {
+            "name": "List Products",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{base_url}}/products"
+            },
+            "response": []
+        },
+        {
+            "name": "Show Product",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{base_url}}/products/1"
+            },
+            "response": []
+        },
+        {
+            "name": "Search Products",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{base_url}}/products/search?query=S23",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "products",
+                        "search"
+                    ],
+                    "query": [
+                        {
+                            "key": "query",
+                            "value": "S23"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "AI Recommendation",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{auth_token}}"
+                    }
+                ],
+                "url": "{{base_url}}/ai/recommendation"
+            },
+            "response": []
+        },
+        {
+            "name": "Admin: Create Credit Package",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{auth_token}}"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"name\": \"Gold\",\n  \"credits\": 100,\n  \"price\": 100,\n  \"reward_points\": 100,\n  \"is_active\": true\n}"
+                },
+                "url": "{{base_url}}/admin/credit-packages"
+            },
+            "response": []
+        },
+        {
+            "name": "Admin: Update Credit Package",
+            "request": {
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{auth_token}}"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    },
+                    {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"name\": \"Platinum\",\n  \"credits\":10 , \n  \"price\":11,\n  \"reward_points\":6\n\n}"
+                },
+                "url": "{{base_url}}/admin/credit-packages/1"
+            },
+            "response": []
+        },
+        {
+            "name": "Admin: Delete Credit Package",
+            "request": {
+                "method": "DELETE",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{auth_token}}"
+                    }
+                ],
+                "url": "{{base_url}}/admin/credit-packages/1"
+            },
+            "response": []
+        },
+        {
+            "name": "Admin: Create Product",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{auth_token}}"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"name\": \"iPhone\",\n  \"description\": \"Latest model\",\n  \"category\": \"Electronics\",\n  \"price_in_points\": 1000,\n  \"is_active\": true\n}"
+                },
+                "url": "{{base_url}}/admin/products"
+            },
+            "response": []
+        },
+        {
+            "name": "Admin: Update Product",
+            "request": {
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{auth_token}}"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"name\": \"iPhone Pro\"\n}"
+                },
+                "url": "{{base_url}}/admin/products/1"
+            },
+            "response": []
+        },
+        {
+            "name": "Admin: Delete Product",
+            "request": {
+                "method": "DELETE",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{auth_token}}"
+                    }
+                ],
+                "url": "{{base_url}}/admin/products/1"
+            },
+            "response": []
+        },
+        {
+            "name": "Admin: Create Offer",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{auth_token}}"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"product_id\": 1,\n  \"is_active\": true\n}"
+                },
+                "url": "{{base_url}}/admin/offers"
+            },
+            "response": []
+        },
+        {
+            "name": "Admin: Update Offer",
+            "request": {
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{auth_token}}"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"is_active\": false\n}"
+                },
+                "url": "{{base_url}}/admin/offers/1"
+            },
+            "response": []
+        },
+        {
+            "name": "Admin: Delete Offer",
+            "request": {
+                "method": "DELETE",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{auth_token}}"
+                    }
+                ],
+                "url": "{{base_url}}/admin/offers/1"
+            },
+            "response": []
         }
-      }
-    },
-    {
-      "name": "Get Credit Packages",
-      "request": {
-        "method": "GET",
-        "url": { "raw": "{{base_url}}/credit-packages", "host": [ "{{base_url}}" ], "path": [ "credit-packages" ] }
-      }
-    },
-    {
-      "name": "Purchase Credit Package",
-      "request": {
-        "method": "POST",
-        "header": [
-          { "key": "Authorization", "value": "Bearer {{auth_token}}" },
-          { "key": "Content-Type", "value": "application/json" }
-        ],
-        "url": { "raw": "{{base_url}}/purchase", "host": [ "{{base_url}}" ], "path": [ "purchase" ] },
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"package_id\": 1\n}"
+    ],
+    "event": [
+        {
+            "listen": "prerequest",
+            "script": {
+                "type": "text/javascript",
+                "packages": {},
+                "exec": [
+                    ""
+                ]
+            }
+        },
+        {
+            "listen": "test",
+            "script": {
+                "type": "text/javascript",
+                "packages": {},
+                "exec": [
+                    ""
+                ]
+            }
         }
-      }
-    },
-    {
-      "name": "Get User Points",
-      "request": {
-        "method": "GET",
-        "header": [
-          { "key": "Authorization", "value": "Bearer {{auth_token}}" }
-        ],
-        "url": { "raw": "{{base_url}}/points", "host": [ "{{base_url}}" ], "path": [ "points" ] }
-      }
-    },
-    {
-      "name": "Redeem Product",
-      "request": {
-        "method": "POST",
-        "header": [
-          { "key": "Authorization", "value": "Bearer {{auth_token}}" },
-          { "key": "Content-Type", "value": "application/json" }
-        ],
-        "url": { "raw": "{{base_url}}/redeem", "host": [ "{{base_url}}" ], "path": [ "redeem" ] },
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"product_id\": 1\n}"
+    ],
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost/api/v1"
+        },
+        {
+            "key": "auth_token",
+            "value": ""
         }
-      }
-    },
-    {
-      "name": "List Products",
-      "request": {
-        "method": "GET",
-        "url": { "raw": "{{base_url}}/products", "host": [ "{{base_url}}" ], "path": [ "products" ] }
-      }
-    },
-    {
-      "name": "Show Product",
-      "request": {
-        "method": "GET",
-        "url": { "raw": "{{base_url}}/products/1", "host": [ "{{base_url}}" ], "path": [ "products", "1" ] }
-      }
-    },
-    {
-      "name": "Search Products",
-      "request": {
-        "method": "GET",
-        "url": {
-          "raw": "{{base_url}}/products/search?query=phone",
-          "host": [ "{{base_url}}" ],
-          "path": [ "products", "search" ],
-          "query": [ { "key": "query", "value": "phone" } ]
-        }
-      }
-    },
-    {
-      "name": "AI Recommendation",
-      "request": {
-        "method": "POST",
-        "header": [
-          { "key": "Authorization", "value": "Bearer {{auth_token}}" }
-        ],
-        "url": { "raw": "{{base_url}}/ai/recommendation", "host": [ "{{base_url}}" ], "path": [ "ai", "recommendation" ] }
-      }
-    },
-    {
-      "name": "Admin: Create Credit Package",
-      "request": {
-        "method": "POST",
-        "header": [
-          { "key": "Authorization", "value": "Bearer {{auth_token}}" },
-          { "key": "Content-Type", "value": "application/json" }
-        ],
-        "url": { "raw": "{{base_url}}/admin/credit-packages", "host": [ "{{base_url}}" ], "path": [ "admin", "credit-packages" ] },
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"name\": \"Gold\",\n  \"credits\": 100,\n  \"price\": 100,\n  \"reward_points\": 100,\n  \"is_active\": true\n}"
-        }
-      }
-    },
-    {
-      "name": "Admin: Update Credit Package",
-      "request": {
-        "method": "PUT",
-        "header": [
-          { "key": "Authorization", "value": "Bearer {{auth_token}}" },
-          { "key": "Content-Type", "value": "application/json" }
-        ],
-        "url": { "raw": "{{base_url}}/admin/credit-packages/1", "host": [ "{{base_url}}" ], "path": [ "admin", "credit-packages", "1" ] },
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"name\": \"Platinum\"\n}"
-        }
-      }
-    },
-    {
-      "name": "Admin: Delete Credit Package",
-      "request": {
-        "method": "DELETE",
-        "header": [
-          { "key": "Authorization", "value": "Bearer {{auth_token}}" }
-        ],
-        "url": { "raw": "{{base_url}}/admin/credit-packages/1", "host": [ "{{base_url}}" ], "path": [ "admin", "credit-packages", "1" ] }
-      }
-    },
-    {
-      "name": "Admin: Create Product",
-      "request": {
-        "method": "POST",
-        "header": [
-          { "key": "Authorization", "value": "Bearer {{auth_token}}" },
-          { "key": "Content-Type", "value": "application/json" }
-        ],
-        "url": { "raw": "{{base_url}}/admin/products", "host": [ "{{base_url}}" ], "path": [ "admin", "products" ] },
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"name\": \"iPhone\",\n  \"description\": \"Latest model\",\n  \"category\": \"Electronics\",\n  \"price_in_points\": 1000,\n  \"is_active\": true\n}"
-        }
-      }
-    },
-    {
-      "name": "Admin: Update Product",
-      "request": {
-        "method": "PUT",
-        "header": [
-          { "key": "Authorization", "value": "Bearer {{auth_token}}" },
-          { "key": "Content-Type", "value": "application/json" }
-        ],
-        "url": { "raw": "{{base_url}}/admin/products/1", "host": [ "{{base_url}}" ], "path": [ "admin", "products", "1" ] },
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"name\": \"iPhone Pro\"\n}"
-        }
-      }
-    },
-    {
-      "name": "Admin: Delete Product",
-      "request": {
-        "method": "DELETE",
-        "header": [
-          { "key": "Authorization", "value": "Bearer {{auth_token}}" }
-        ],
-        "url": { "raw": "{{base_url}}/admin/products/1", "host": [ "{{base_url}}" ], "path": [ "admin", "products", "1" ] }
-      }
-    },
-    {
-      "name": "Admin: Create Offer",
-      "request": {
-        "method": "POST",
-        "header": [
-          { "key": "Authorization", "value": "Bearer {{auth_token}}" },
-          { "key": "Content-Type", "value": "application/json" }
-        ],
-        "url": { "raw": "{{base_url}}/admin/offers", "host": [ "{{base_url}}" ], "path": [ "admin", "offers" ] },
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"product_id\": 1,\n  \"is_active\": true\n}"
-        }
-      }
-    },
-    {
-      "name": "Admin: Update Offer",
-      "request": {
-        "method": "PUT",
-        "header": [
-          { "key": "Authorization", "value": "Bearer {{auth_token}}" },
-          { "key": "Content-Type", "value": "application/json" }
-        ],
-        "url": { "raw": "{{base_url}}/admin/offers/1", "host": [ "{{base_url}}" ], "path": [ "admin", "offers", "1" ] },
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"is_active\": false\n}"
-        }
-      }
-    },
-    {
-      "name": "Admin: Delete Offer",
-      "request": {
-        "method": "DELETE",
-        "header": [
-          { "key": "Authorization", "value": "Bearer {{auth_token}}" }
-        ],
-        "url": { "raw": "{{base_url}}/admin/offers/1", "host": [ "{{base_url}}" ], "path": [ "admin", "offers", "1" ] }
-      }
-    }
-  ]
-} 
+    ]
+}
